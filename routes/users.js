@@ -48,7 +48,6 @@ router.post('/', function(req, res) {
 									});
 					newUser.save(function(err, user){
 						res.json({
-							data: user,
 							token: user.token
 						});
 					});		        
@@ -56,6 +55,25 @@ router.post('/', function(req, res) {
 			}
 		}
 	});
+});
+
+router.get('/self/?access_token=:token', function(req, res){
+	var token = req.body.access_token;
+	res.json({
+		token: token
+	});
+	// User.findById(req.params.id, function(err, user){
+	// 	if(err){
+	// 		res.json({
+	// 			status: 500,
+	// 			err: "create user error"
+	// 		});
+	// 	}else{
+	// 		res.json({
+	// 			user: user
+	// 		});
+	// 	}
+	// });
 });
 
 module.exports = router;
