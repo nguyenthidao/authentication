@@ -1,6 +1,6 @@
 var express = require('express');
-var jwt = require("jsonwebtoken");
 var router = express.Router();
+var jwt = require("jsonwebtoken");
 var User = require('../models/User');
 var TOKEN_EXPIRATION = 60;
 /* GET users listing. */
@@ -24,7 +24,7 @@ router.post('/', function(req, res) {
 	var password = req.body.password;
 
 	User.findOne({
-		where:{email: email}
+		email: email
 	}, function(err, user){
 		if(err){
 			res.json({
@@ -36,13 +36,12 @@ router.post('/', function(req, res) {
 					data: "User already exists!"
 				});
 			}else{
-				var userModel = new User();
+				var userModel = new User({
+					email: email,
+					password: password
+				});
 
-				userModel.email = email;
-				userModel.password = password;
 				userModel.save(function(err, newUser){
-					newUser.email = email;
-					newUser.password = password;
 					newUser.token = jwt.sign({ user: newUser,
 											 }, 'secret', {
 							            expiresIn: TOKEN_EXPIRATION
